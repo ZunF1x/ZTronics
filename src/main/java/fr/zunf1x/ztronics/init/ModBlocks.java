@@ -25,12 +25,13 @@ public class ModBlocks {
 
     public static List<Block> blocks;
 
-    public static Block coal_generator;
+    public static Block coal_generator, coal_generator_lit;
 
     public static void init() {
         blocks = new ArrayList<>();
 
-        coal_generator = new BlockCoalGenerator();
+        coal_generator = new BlockCoalGenerator(false);
+        coal_generator_lit = new BlockCoalGenerator(true);
     }
 
     @SubscribeEvent

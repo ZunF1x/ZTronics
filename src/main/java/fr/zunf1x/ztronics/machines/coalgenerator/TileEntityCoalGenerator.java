@@ -3,6 +3,7 @@ package fr.zunf1x.ztronics.machines.coalgenerator;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import cofh.redstoneflux.api.IEnergyStorage;
 import cofh.redstoneflux.impl.EnergyStorage;
+import fr.zunf1x.ztronics.blocks.BlockCoalGenerator;
 import fr.zunf1x.ztronics.energy.TileEnergized;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,10 +22,8 @@ public class TileEntityCoalGenerator extends TileEnergized implements ITickable,
     private String customName;
     private int	burningTimeLeft	= 0;
 
-    BlockFurnace
-
     public TileEntityCoalGenerator() {
-        super(new EnergyStorage(10000, 1000));
+        super(new EnergyStorage(20000, 1000));
     }
 
     @Override
@@ -185,13 +184,15 @@ public class TileEntityCoalGenerator extends TileEnergized implements ITickable,
 
     @Override
     public void update() {
+        boolean flag = this.isBurning();
+
+        outputEnergy();
+
+        if (this.isBurning()) {
+            this.burningTimeLeft--;
+        }
+
         if (!this.world.isRemote) {
-            outputEnergy();
-
-            if (this.isBurning()) {
-                this.burningTimeLeft--;
-            }
-
             if (!this.isBurning() && !this.getStackInSlot(0).isEmpty() && this.getField(1) < this.getField(2)) {
                 this.burningTimeLeft = this.getFullBurnTime();
                 this.decrStackSize(0, 1);
@@ -201,8 +202,12 @@ public class TileEntityCoalGenerator extends TileEnergized implements ITickable,
                 storage.receiveEnergy(50, false);
             }
 
-            this.markDirty();
+            if (flag != this.isBurning()) {
+                BlockCoalGenerator.setState(this.isBurning(), this.world, this.pos);
+            }
         }
+
+        this.markDirty();
     }
 
     @Override

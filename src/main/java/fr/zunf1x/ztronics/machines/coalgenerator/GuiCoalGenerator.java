@@ -1,6 +1,7 @@
 package fr.zunf1x.ztronics.machines.coalgenerator;
 
 import fr.zunf1x.ztronics.utils.Constants;
+import fr.zunf1x.ztronics.utils.NumberFormater;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +21,19 @@ public class GuiCoalGenerator extends GuiContainer {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
+        this.addEnergyToolTip(mouseX, mouseY, 9, 22);
+    }
+
+    public void addEnergyToolTip(int mX, int mY, int x, int y) {
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
+
+        int mouseX = mX - i;
+        int mouseY = mY - j;
+
+        if (mouseX >= x && mouseY >= y && mouseX < x + 14 && mouseY < y + 42) {
+            drawHoveringText(NumberFormater.formatInt(this.tile.getField(1)) + " / " + NumberFormater.formatInt(this.tile.getField(2)) + " RF", mX, mY);
+        }
     }
 
     @Override

@@ -39,21 +39,25 @@ public abstract class TileEnergized extends TileEntityLockable implements IEnerg
 
     public void outputEnergy() {
         for (EnumFacing f : EnumFacing.VALUES) {
-            TileEntity te = getWorld().getTileEntity(new BlockPos(this.getPos().getX() + f.getFrontOffsetX(), this.getPos().getY() + f.getFrontOffsetY(), this.getPos().getZ() + f.getFrontOffsetZ()));
-            if (te instanceof IEnergyReceiver)
-                extractEnergy(((IEnergyReceiver) te).receiveEnergy(f.getOpposite(), extractEnergy(this.storage.getMaxExtract(), true), false), false);
-            else if (te instanceof IEnergyStorage)
-                extractEnergy(((IEnergyStorage) te).receiveEnergy(extractEnergy(this.storage.getMaxExtract(), true), false), false);
+            if (canConnectEnergy(f)) {
+                TileEntity te = getWorld().getTileEntity(new BlockPos(this.getPos().getX() + f.getFrontOffsetX(), this.getPos().getY() + f.getFrontOffsetY(), this.getPos().getZ() + f.getFrontOffsetZ()));
+                if (te instanceof IEnergyReceiver)
+                    extractEnergy(((IEnergyReceiver) te).receiveEnergy(f.getOpposite(), extractEnergy(this.storage.getMaxExtract(), true), false), false);
+                else if (te instanceof IEnergyStorage)
+                    extractEnergy(((IEnergyStorage) te).receiveEnergy(extractEnergy(this.storage.getMaxExtract(), true), false), false);
+            }
         }
     }
 
     public void inputEnergy() {
         for (EnumFacing f : EnumFacing.VALUES) {
-            TileEntity te = getWorld().getTileEntity(new BlockPos(this.getPos().getX() + f.getFrontOffsetX(), this.getPos().getY() + f.getFrontOffsetY(), this.getPos().getZ() + f.getFrontOffsetZ()));
-            if (te instanceof IEnergyProvider)
-                receiveEnergy(((IEnergyProvider) te).extractEnergy(f.getOpposite(), receiveEnergy(this.storage.getMaxReceive(), true), false), false);
-            else if (te instanceof IEnergyStorage)
-                receiveEnergy(((IEnergyStorage) te).extractEnergy(receiveEnergy(this.storage.getMaxReceive(), true), false), false);
+            if (canConnectEnergy(f)) {
+                TileEntity te = getWorld().getTileEntity(new BlockPos(this.getPos().getX() + f.getFrontOffsetX(), this.getPos().getY() + f.getFrontOffsetY(), this.getPos().getZ() + f.getFrontOffsetZ()));
+                if (te instanceof IEnergyProvider)
+                    receiveEnergy(((IEnergyProvider) te).extractEnergy(f.getOpposite(), receiveEnergy(this.storage.getMaxReceive(), true), false), false);
+                else if (te instanceof IEnergyStorage)
+                    receiveEnergy(((IEnergyStorage) te).extractEnergy(receiveEnergy(this.storage.getMaxReceive(), true), false), false);
+            }
         }
     }
 
