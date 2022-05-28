@@ -2,6 +2,7 @@ package fr.zunf1x.ztronics.machines.coalgenerator;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
@@ -19,7 +20,12 @@ public class ContainerCoalGenerator extends Container {
     public ContainerCoalGenerator(TileEntityCoalGenerator tile, InventoryPlayer playerInventory) {
         this.tile = tile;
 
-        this.addSlotToContainer(new Slot(tile, 0, 80, 35));
+        this.addSlotToContainer(new Slot(tile, 0, 80, 35) {
+            @Override
+            public boolean isItemValid(ItemStack stack) {
+                return stack.getItem() == Items.COAL;
+            }
+        });
 
         addPlayerInventory(playerInventory);
     }

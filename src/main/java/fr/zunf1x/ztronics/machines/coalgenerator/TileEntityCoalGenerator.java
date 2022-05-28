@@ -8,6 +8,7 @@ import fr.zunf1x.ztronics.energy.TileEnergized;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -193,7 +194,7 @@ public class TileEntityCoalGenerator extends TileEnergized implements ITickable,
         }
 
         if (!this.world.isRemote) {
-            if (!this.isBurning() && !this.getStackInSlot(0).isEmpty() && this.getField(1) < this.getField(2)) {
+            if (!this.isBurning() && !this.getStackInSlot(0).isEmpty() && this.getStackInSlot(0).getItem() == Items.COAL && this.getField(1) < this.getField(2)) {
                 this.burningTimeLeft = this.getFullBurnTime();
                 this.decrStackSize(0, 1);
             }
